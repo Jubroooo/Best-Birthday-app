@@ -1,6 +1,6 @@
 import  React, {useRef,useEffect,useState} from 'react';
 import { WebView } from 'react-native-webview';
-import { SafeAreaView, StatusBar,BackHandler,ToastAndroid } from 'react-native';
+import { SafeAreaView, StatusBar,BackHandler,ToastAndroid, Platform, Linking } from 'react-native';
 
 const toastWithDurationHandler = () => {
     ToastAndroid.show("'뒤로' 버튼을  한번 더 누르시면 종료됩니다.", ToastAndroid.SHORT);
@@ -48,12 +48,14 @@ export default function App() {
     };
     
   }, [mainUrl]);
+
   return (
     <>
         <StatusBar barStyle="black-content" hidden />
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <WebView
           source={{ uri: 'https://bestbirthday.co.kr/'}}
+          originWhitelist={['http://*', 'https://*', 'intent://*']}
           injectedJavaScript={INJECTED_JAVASCRIPT}
           // userAgent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
           ref={webview}
@@ -62,7 +64,14 @@ export default function App() {
           onNavigationStateChange={(navState) => {
             // Keep track of going back navigation within component
             onUrlChange(navState.url.split('https://bestbirthday.co.kr')[1]);
-          }}          
+          }}
+          onShouldStartLoadWithRequest={(request) => {
+            if (request.url.startsWith('intent')) {
+              void Linking.openURL(request.url);
+              return false;
+            }
+            return true;
+          }}
         />
         </SafeAreaView>
     </>
