@@ -57,7 +57,7 @@ export default function App() {
           source={{ uri: 'https://bestbirthday.co.kr/'}}
           originWhitelist={['http://*', 'https://*', 'intent://*']}
           injectedJavaScript={INJECTED_JAVASCRIPT}
-          // userAgent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
+          userAgent={mainUrl === '/users/login/' ? 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36' : null}
           ref={webview}
           allowsbackforwardnavigationgestures={true}
           scalesPageToFit={true}
