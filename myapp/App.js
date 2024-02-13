@@ -11,7 +11,7 @@ export default function App() {
   const meta = document.createElement('meta'); meta.setAttribute('content', 'initial-scale=1, maximum-scale=1, user-scalable=no'); meta.setAttribute('name', 'viewport'); document.getElementsByTagName('head')[0].appendChild(meta);
 })();`;
   
-  const [mainUrl, setMainUrl] = useState('hello'); 
+  const [mainUrl, setMainUrl] = useState(''); 
 
   const onUrlChange = (ref) => {
     setMainUrl(ref);
@@ -21,7 +21,7 @@ export default function App() {
   const webview = useRef(null);
   let time = 0;
   const onAndroidBackPress = () => {
-    if (mainUrl === 'hello') {
+    if (mainUrl === '/') {
       console.log('나갈 수 있는 상태');
       time += 1;
       toastWithDurationHandler(); // 뒤로가기 토스트 바 
@@ -55,18 +55,13 @@ export default function App() {
         <WebView
           source={{ uri: 'https://bestbirthday.co.kr/'}}
           injectedJavaScript={INJECTED_JAVASCRIPT}
-          userAgent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36"
+          // userAgent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
           ref={webview}
           allowsbackforwardnavigationgestures={true}
           scalesPageToFit={true}
-          onMessage={(event) => {
-            let data = event.nativeEvent.data;
-            let final = data.split('#');
-            switch (final[0]) {
-              case 'url':
-                onUrlChange(final[1]);
-                break;
-            }
+          onNavigationStateChange={(navState) => {
+            // Keep track of going back navigation within component
+            onUrlChange(navState.url.split('https://bestbirthday.co.kr')[1]);
           }}          
         />
         </SafeAreaView>
