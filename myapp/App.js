@@ -1,6 +1,7 @@
 import  React, {useRef,useEffect,useState} from 'react';
 import { WebView } from 'react-native-webview';
 import { SafeAreaView, StatusBar,BackHandler,ToastAndroid, Platform, Linking } from 'react-native';
+import { startActivityAsync } from "expo-intent-launcher";
 
 const toastWithDurationHandler = () => {
     ToastAndroid.show("'뒤로' 버튼을  한번 더 누르시면 종료됩니다.", ToastAndroid.SHORT);
@@ -67,11 +68,26 @@ export default function App() {
           }}
           onShouldStartLoadWithRequest={(request) => {
             if (request.url.startsWith('intent') || request.url.startsWith('kakaotalk') || request.url.startsWith('itms-apps')) {
-              Linking.openURL(request.url);
+              console.log('here!!')
+              if(Platform.OS === 'android') {
+                Linking.sendIntent("android.intent.action.VIEW", [
+                  {
+                    // key: 'android.provider.extra.APP_PACKAGE',
+                    value: request.url,
+                  },
+                ]).catch(error => {
+                  console.log(error);
+                });
+              } else {
+                Linking.openURL(request.url);
+              }
               return false;
             }
             return true;
           }}
+          // onShouldStartLoadWithRequest={event => {
+          //   return onShouldStartLoadWithRequest(event);
+          // }}
           allowsBackForwardNavigationGestures={true}
         />
         </SafeAreaView>
