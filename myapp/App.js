@@ -55,7 +55,7 @@ export default function App() {
         <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
         <WebView
           source={{ uri: 'https://bestbirthday.co.kr/'}}
-          originWhitelist={['http://*', 'https://*', 'intent://*']}
+          originWhitelist={['http://*', 'https://*', 'intent://*', 'kakaotalk://*', 'itms-apps://*']}
           injectedJavaScript={INJECTED_JAVASCRIPT}
           userAgent={mainUrl === '/users/login/' ? 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36' : null}
           ref={webview}
@@ -66,12 +66,13 @@ export default function App() {
             onUrlChange(navState.url.split('https://bestbirthday.co.kr')[1]);
           }}
           onShouldStartLoadWithRequest={(request) => {
-            if (request.url.startsWith('intent')) {
-              void Linking.openURL(request.url);
+            if (request.url.startsWith('intent') || request.url.startsWith('kakaotalk') || request.url.startsWith('itms-apps')) {
+              Linking.openURL(request.url);
               return false;
             }
             return true;
           }}
+          allowsBackForwardNavigationGestures={true}
         />
         </SafeAreaView>
     </>
