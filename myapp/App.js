@@ -68,16 +68,16 @@ export default function App() {
           }}
           onShouldStartLoadWithRequest={(request) => {
             if (request.url.startsWith('intent') || request.url.startsWith('kakaotalk') || request.url.startsWith('itms-apps')) {
-              console.log('here!!')
-              if(Platform.OS === 'android') {
-                Linking.sendIntent("android.intent.action.VIEW", [
-                  {
-                    // key: 'android.provider.extra.APP_PACKAGE',
-                    value: request.url,
-                  },
-                ]).catch(error => {
-                  console.log(error);
-                });
+              if (Platform.OS === 'android') {
+                if(request.url.includes('toss')){
+                  Linking.openURL(request.url);
+                } else {
+                  const intentData = request.url.replace('intent://', '').split('#Intent;')[0];
+                  const [scheme, path] = intentData.split('=');
+                  const convertedUrl = `https://qr.kakaopay.com/${path}`;
+            
+                  Linking.openURL(convertedUrl);
+                }            
               } else {
                 Linking.openURL(request.url);
               }
