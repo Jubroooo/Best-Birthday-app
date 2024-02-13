@@ -51,7 +51,7 @@ export default function App() {
 
   return (
     <>
-        <StatusBar barStyle="black-content" hidden />
+        <StatusBar barStyle="dark" />
         <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
         <WebView
           source={{ uri: 'https://bestbirthday.co.kr/'}}
