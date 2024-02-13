@@ -52,7 +52,7 @@ export default function App() {
   return (
     <>
         <StatusBar barStyle="black-content" hidden />
-        <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#000' }}>
         <WebView
           source={{ uri: 'https://bestbirthday.co.kr/'}}
           originWhitelist={['http://*', 'https://*', 'intent://*', 'kakaotalk://*', 'itms-apps://*']}
